@@ -1,0 +1,5 @@
+node_modules
+auth_info_baileys
+data_stok.json
+.env
+credentials.json

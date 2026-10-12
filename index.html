@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Brownis d'mila - Form Input Stok</title>
+  <style>
+    :root {
+      --primary: #8B4513;
+      --primary-dark: #5c2c09;
+      --accent: #D2691E;
+      --bg: #FDFBF7;
+      --card-bg: #FFFFFF;
+      --text: #2C1810;
+      --text-muted: #7A6960;
+      --border: #E8DCC4;
+      --success: #2E7D32;
+      --shadow: 0 8px 24px rgba(139, 69, 19, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      padding: 16px;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 460px;
+      background: var(--card-bg);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 24px 20px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .header p {
+      font-size: 0.85rem;
+      opacity: 0.9;
+      margin-top: 4px;
+    }
+
+    .content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .badge-stock {
+      font-size: 0.75rem;
+      background: #FFF3E0;
+      color: #E65100;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+      border: 1px solid #FFE0B2;
+    }
+
+    select, input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      background: #FAFAFA;
+      color: var(--text);
+      transition: all 0.2s;
+      outline: none;
+    }
+
+    select:focus, input:focus {
+      border-color: var(--accent);
+      background: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(210, 105, 30, 0.15);
+    }
+
+    .input-hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .preview-card {
+      background: #FDF6E9;
+      border: 1.5px dashed var(--accent);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .preview-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .preview-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+
+    .preview-total {
+      border-top: 1px solid rgba(139, 69, 19, 0.15);
+      padding-top: 8px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--primary-dark);
+    }
+
+    .formula-tag {
+      font-size: 0.75rem;
+      font-family: monospace;
+      color: #6D4C41;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 4px 8px;
+      border-radius: 6px;
+      word-break: break-all;
+    }
+
+    .btn-submit {
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      color: white;
+      border: none;
+      padding: 15px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(210, 105, 30, 0.3);
+      transition: transform 0.15s, opacity 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-submit:active {
+      transform: scale(0.98);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .alert {
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      display: none;
+      animation: fadeIn 0.3s;
+    }
+
+    .alert-success {
+      background: #E8F5E9;
+      color: #1B5E20;
+      border: 1px solid #A5D6A7;
+    }
+
+    .alert-error {
+      background: #FFEBEE;
+      color: #B71C1C;
+      border: 1px solid #FFCDD2;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h1>🥐 Brownis d'mila</h1>
+      <p>Dashboard Input Transaksi & Stok</p>
+    </div>
+
+    <div class="content">
+      <div id="alertBox" class="alert"></div>
+
+      <!-- PILIH NAMA SALES -->
+      <div class="form-group">
+        <label for="salesSelect">
+          <span>👤 Nama</span>
+          <span id="stockBadge" class="badge-stock" style="display:none;">Stok: - pcs</span>
+        </label>
+        <select id="salesSelect">
+          <option value="">-- Memuat Nama... --</option>
+        </select>
+        <input type="text" id="newSalesInput" placeholder="Ketik nama baru..." style="display:none; margin-top: 6px;">
+      </div>
+
+      <!-- ORDER -->
+      <div class="form-group">
+        <label for="orderInput">🛒 Order (pcs)</label>
+        <input type="number" id="orderInput" placeholder="0" min="0" value="0">
+        <div class="input-hint">Jumlah tambahan stok yang dibawa sales</div>
+      </div>
+
+      <!-- BAYAR -->
+      <div class="form-group">
+        <label for="bayarInput">💵 Bayar (Rp)</label>
+        <input type="number" id="bayarInput" placeholder="0" min="0" step="2500" value="0">
+        <div class="input-hint" id="pcsBayarHint">= 0 pcs terjual (Rp 2.500 / pcs)</div>
+      </div>
+
+      <!-- RETUR -->
+      <div class="form-group">
+        <label for="returInput">↩️ Retur (pcs)</label>
+        <input type="number" id="returInput" placeholder="0" min="0" value="0">
+        <div class="input-hint">Jumlah stok yang dikembalikan ke gudang</div>
+      </div>
+
+      <!-- LIVE PREVIEW PERHITUNGAN -->
+      <div class="preview-card">
+        <div class="preview-title">📊 Ringkasan Kalkulasi</div>
+        <div class="preview-row">
+          <span>Stok Awal:</span>
+          <strong id="previewStokAwal">0 pcs</strong>
+        </div>
+        <div class="preview-row">
+          <span>Perubahan (+Order, -Retur, -Terjual):</span>
+          <span id="previewPerubahan">0 pcs</span>
+        </div>
+        <div class="preview-row preview-total">
+          <span>Total Stok Akhir:</span>
+          <span id="previewTotalStok">0 pcs</span>
+        </div>
+        <div class="formula-tag" id="previewRumus">-</div>
+      </div>
+
+      <button id="btnSubmit" class="btn-submit">
+        <span>💾 Simpan & Kirim ke WhatsApp</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    let salesData = [];
+    let currentStokAwal = 0;
+    let currentKategori = 'Sales';
+
+    const salesSelect = document.getElementById('salesSelect');
+    const newSalesInput = document.getElementById('newSalesInput');
+    const stockBadge = document.getElementById('stockBadge');
+    const orderInput = document.getElementById('orderInput');
+    const bayarInput = document.getElementById('bayarInput');
+    const returInput = document.getElementById('returInput');
+    const pcsBayarHint = document.getElementById('pcsBayarHint');
+
+    const previewStokAwal = document.getElementById('previewStokAwal');
+    const previewPerubahan = document.getElementById('previewPerubahan');
+    const previewTotalStok = document.getElementById('previewTotalStok');
+    const previewRumus = document.getElementById('previewRumus');
+    const btnSubmit = document.getElementById('btnSubmit');
+    const alertBox = document.getElementById('alertBox');
+
+    function formatNumber(num) {
+      return Number(num || 0).toLocaleString('id-ID');
+    }
+
+    function getHargaPerPcs() {
+      return currentKategori.toLowerCase() === 'sales' ? 2500 : 3000;
+    }
+
+    // Ambil daftar nama dari server
+    async function loadSales() {
+      try {
+        const res = await fetch('/api/sales');
+        const data = await res.json();
+        salesData = data.sales || [];
+
+        salesSelect.innerHTML = '<option value="">-- Pilih Nama --</option>';
+        salesData.forEach(item => {
+          const opt = document.createElement('option');
+          opt.value = item.name;
+          const katLabel = item.kategori ? ` [${item.kategori}]` : '';
+          opt.textContent = `${item.name}${katLabel} (${formatNumber(item.stok)} pcs)`;
+          salesSelect.appendChild(opt);
+        });
+
+        const optNew = document.createElement('option');
+        optNew.value = '__NEW__';
+        optNew.textContent = '+ Tambah Nama Baru...';
+        salesSelect.appendChild(optNew);
+
+        // Auto-select nama pertama jika ada
+        if (salesData.length > 0) {
+          salesSelect.value = salesData[0].name;
+          onSalesChange();
+        }
+      } catch (err) {
+        console.error('Gagal memuat nama:', err);
+      }
+    }
+
+    function onSalesChange() {
+      const selected = salesSelect.value;
+      if (selected === '__NEW__') {
+        newSalesInput.style.display = 'block';
+        currentStokAwal = 0;
+        currentKategori = 'Sales';
+        stockBadge.style.display = 'none';
+      } else {
+        newSalesInput.style.display = 'none';
+        const found = salesData.find(s => s.name === selected);
+        if (found) {
+          currentStokAwal = found.stok;
+          currentKategori = found.kategori || 'Sales';
+          stockBadge.textContent = `[${currentKategori}] Stok: ${formatNumber(found.stok)} pcs`;
+          stockBadge.style.display = 'inline-block';
+        } else {
+          currentStokAwal = 0;
+          currentKategori = 'Sales';
+          stockBadge.style.display = 'none';
+        }
+      }
+      updatePreview();
+    }
+
+    function updatePreview() {
+      const order = parseInt(orderInput.value, 10) || 0;
+      const bayar = parseInt(bayarInput.value, 10) || 0;
+      const retur = parseInt(returInput.value, 10) || 0;
+
+      const harga = getHargaPerPcs();
+      const pcsBayar = bayar > 0 ? Math.round(bayar / harga) : 0;
+      pcsBayarHint.textContent = `= ${formatNumber(pcsBayar)} pcs terjual (@ Rp ${formatNumber(harga)} / pcs)`;
+
+      const stokAkhir = currentStokAwal + order - retur - pcsBayar;
+
+      previewStokAwal.textContent = `${formatNumber(currentStokAwal)} pcs`;
+
+      let perubahan = (order - retur - pcsBayar);
+      previewPerubahan.textContent = `${perubahan >= 0 ? '+' : ''}${formatNumber(perubahan)} pcs`;
+      previewTotalStok.textContent = `${formatNumber(stokAkhir)} pcs`;
+
+      // Rumus Catatan
+      let rumus = `${formatNumber(currentStokAwal)}`;
+      if (order > 0) rumus += ` + ${formatNumber(order)}`;
+      if (retur > 0) rumus += ` - ${formatNumber(retur)}`;
+      if (pcsBayar > 0) rumus += ` - ${formatNumber(pcsBayar)}`;
+      rumus += ` = ${formatNumber(stokAkhir)}`;
+
+      previewRumus.textContent = rumus;
+    }
+
+    salesSelect.addEventListener('change', onSalesChange);
+    orderInput.addEventListener('input', updatePreview);
+    bayarInput.addEventListener('input', updatePreview);
+    returInput.addEventListener('input', updatePreview);
+
+    // Submit form
+    btnSubmit.addEventListener('click', async () => {
+      let nama = salesSelect.value;
+      if (nama === '__NEW__') {
+        nama = newSalesInput.value.trim();
+      }
+
+      if (!nama) {
+        showAlert('Silakan pilih atau ketik nama terlebih dahulu!', 'error');
+        return;
+      }
+
+      const order = parseInt(orderInput.value, 10) || 0;
+      const bayar = parseInt(bayarInput.value, 10) || 0;
+      const retur = parseInt(returInput.value, 10) || 0;
+
+      if (order === 0 && bayar === 0 && retur === 0) {
+        showAlert('Harap isi minimal salah satu nilai: Order, Bayar, atau Retur!', 'error');
+        return;
+      }
+
+      btnSubmit.disabled = true;
+      btnSubmit.innerHTML = '<span>⏳ Menyimpan...</span>';
+
+      try {
+        const res = await fetch('/api/transaksi', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sales: nama,
+            order,
+            bayar,
+            retur
+          })
+        });
+
+        const result = await res.json();
+        if (result.success) {
+          showAlert('✅ Transaksi berhasil dicatat dan laporan dikirim ke WhatsApp!', 'success');
+          // Reset input
+          orderInput.value = 0;
+          bayarInput.value = 0;
+          returInput.value = 0;
+          // Reload sales data
+          await loadSales();
+          salesSelect.value = nama;
+          onSalesChange();
+        } else {
+          showAlert('❌ Gagal: ' + (result.error || 'Terjadi kesalahan'), 'error');
+        }
+      } catch (err) {
+        showAlert('❌ Gagal terhubung ke server: ' + err.message, 'error');
+      } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = '<span>💾 Simpan & Kirim ke WhatsApp</span>';
+      }
+    });
+
+    function showAlert(msg, type) {
+      alertBox.textContent = msg;
+      alertBox.className = 'alert alert-' + type;
+      alertBox.style.display = 'block';
+      setTimeout(() => {
+        alertBox.style.display = 'none';
+      }, 5000);
+    }
+
+    loadSales();
+  </script>
+</body>
+</html>
